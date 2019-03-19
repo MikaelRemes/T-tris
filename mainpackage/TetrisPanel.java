@@ -18,6 +18,7 @@ public class TetrisPanel extends JPanel implements Runnable{
 	private final int height = 800;
 	private final int boxesWidth = 10;
 	private final int boxesHeight = 20;
+	
 
 	
 	private GameState game;
@@ -55,6 +56,11 @@ public class TetrisPanel extends JPanel implements Runnable{
 		game.boxes[0][4]=1;
 		game.boxes[1][2]=1;
 		
+		game.boxes[0][0]=2;
+		game.boxes[0][1]=2;
+		game.boxes[0][2]=2;
+		game.boxes[0][3]=2;
+		
 		
 		this.setPreferredSize(new Dimension(width,height));
 		setFocusable(true);
@@ -64,8 +70,6 @@ public class TetrisPanel extends JPanel implements Runnable{
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -75,6 +79,10 @@ public class TetrisPanel extends JPanel implements Runnable{
 					
 				}
 				if(game.boxes[i][j]==1) {
+					g.setColor(Color.BLUE);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
+				}
+				if(game.boxes[i][j]==2) {
 					g.setColor(Color.RED);
 					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
 				}
@@ -84,8 +92,6 @@ public class TetrisPanel extends JPanel implements Runnable{
 	}
 	
 	public void run(){										//starts frame drawing loop and starts the game loop
-		//start the game
-		game.run();
 		
 		boolean running=true;
 		while(running){
