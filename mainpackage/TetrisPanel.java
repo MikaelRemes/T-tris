@@ -76,7 +76,8 @@ public class TetrisPanel extends JPanel implements Runnable{
 		for(int i=0;i<game.boxes.length;i++) {
 			for(int j=0;j<game.boxes[i].length;j++) {
 				if(game.boxes[i][j]==0) {
-					
+					g.setColor(Color.GREEN);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
 				}
 				if(game.boxes[i][j]==1) {
 					g.setColor(Color.BLUE);
