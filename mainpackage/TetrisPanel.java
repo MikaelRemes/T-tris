@@ -5,32 +5,60 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
 
-public class TetrisPanel extends JPanel{
+public class TetrisPanel extends JPanel implements Runnable{
 	
 	private static final long serialVersionUID = 2L;
-	private final int height = 800;
 	private final int width = 400;
+	private final int height = 800;
+	private final int boxesWidth = 10;
+	private final int boxesHeight = 20;
+
 	
-	private int[][] boxes;
+	private GameState game;
 	
 
 	public TetrisPanel() {
-		boxes = new int[10][20];
-		for(int[] xAxisBoxes : boxes) {
-			for(int yAxisBox : xAxisBoxes) {
+		
+		game = new GameState(boxesWidth, boxesHeight);
+		
+		addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				game.keyReleased(e);
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+		});
+		
+		for(int[] xAxisBoxes : game.boxes) {
+			for(@SuppressWarnings("unused") int yAxisBox : xAxisBoxes) {
 				yAxisBox=0;
 			}
 		}
-		boxes[0][2]=1;
-		boxes[0][3]=1;
-		boxes[0][4]=1;
-		boxes[1][2]=1;
+		
+		//for testing purpouses
+		game.boxes[0][2]=1;
+		game.boxes[0][3]=1;
+		game.boxes[0][4]=1;
+		game.boxes[1][2]=1;
+		
+		
 		this.setPreferredSize(new Dimension(width,height));
 		setFocusable(true);
+		
 	}
 	
 	@Override
@@ -41,18 +69,37 @@ public class TetrisPanel extends JPanel{
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		for(int i=0;i<boxes.length;i++) {
-			for(int j=0;j<boxes[i].length;j++) {
-				if(boxes[i][j]==0) {
+		for(int i=0;i<game.boxes.length;i++) {
+			for(int j=0;j<game.boxes[i].length;j++) {
+				if(game.boxes[i][j]==0) {
 					
 				}
-				if(boxes[i][j]==1) {
+				if(game.boxes[i][j]==1) {
 					g.setColor(Color.RED);
-					g.fillRect(i*(getWidth()/boxes.length)+2, j*(getHeight()/boxes[0].length)+2, (getWidth()/boxes.length)-4, (getHeight()/boxes[0].length)-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
 				}
 			}
 		}
 
 	}
+	
+	public void run(){										//starts frame drawing loop and starts the game loop
+		//start the game
+		game.run();
+		
+		boolean running=true;
+		while(running){
+			
+			this.repaint();									//repaints the screen every 15 milliseconds (~60fps)
+			
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				running=false;
+				e.printStackTrace();
+			}
+		}
+	}
+	
 
 }

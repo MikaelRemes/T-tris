@@ -1,58 +1,41 @@
 package mainpackage;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class UserInterface extends JFrame implements Runnable{
+public class UserInterface extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
-	
 	private TetrisPanel tetrispanel;
-	//private JPanel statspanel;
-	
-	
-	
+		
 	public UserInterface() {
 		
+
 		this.setTitle("Tötris");
 		tetrispanel = new TetrisPanel();
-		//statspanel = new JPanel();
-		
 		this.getContentPane().setLayout(new BorderLayout());
-
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		//stops user from resizing screen
 		this.setResizable(false);
 		
+		
+		
+		//adds tetris gamepanel to JFrame
 		this.add((JPanel) tetrispanel);
 		
+		//sets frame size to 400 by 800
 		this.setSize(400, 800);
 		
+		//pack helps to center game on screen when jframe is set visible
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		
-		
-		
-	}
-	
-	public void run(){
-		boolean running=true;
-		while(running){
 			
-			tetrispanel.repaint();
-			
-			try {
-				Thread.sleep(15);
-			} catch (InterruptedException e) {
-				running=false;
-				e.printStackTrace();
-			}
-		}
+		tetrispanel.run();
 	}
 
 }
