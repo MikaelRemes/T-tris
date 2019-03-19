@@ -54,10 +54,10 @@ public class GameState implements Runnable{
 		while(running){
 			
 			doGravity();
+			System.out.println("one tick");
 			
 			try {
 				Thread.sleep(1000);
-				System.out.println("one tick");
 			} catch (InterruptedException e) {
 				running=false;
 				e.printStackTrace();
@@ -70,7 +70,7 @@ public class GameState implements Runnable{
 		for(int i=0;i<boxes.length;i++) {
 			for(int j=0;j<boxes[i].length;j++) {
 				if(boxes[i][j] == 0) {
-					nextBoxes[i][j] = 0;
+					//nextBoxes[i][j] = 0;
 				}
 				if(boxes[i][j] == 1) {
 					nextBoxes[i][j] = 1;
@@ -83,7 +83,9 @@ public class GameState implements Runnable{
 			}
 		}
 		
-		boxes=nextBoxes;
+		for(int k=0;k<boxes.length;k++) {
+			System.arraycopy(nextBoxes[k], 0, boxes[k], 0, nextBoxes.length);
+		}
 	}
 	
 	public void generatePiece() {
