@@ -123,12 +123,13 @@ public class GameState implements Runnable{
 			}
 		}
 		
-		collision=false;
-		
 		//copy next boxes state into boxes
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesGravity[k], 0, boxes[k], 0, nextBoxesGravity[k].length);
 		}
+		
+		if(collision)generatePiece();
+		collision=false;
 	}
 	
 	
@@ -198,10 +199,14 @@ public class GameState implements Runnable{
 		Random rng = new Random();
 		int nextpiece=rng.nextInt(7);
 		
+		nextpiece=0;
 		
 		//I-piece
 		if(nextpiece==0) {
-			
+			boxes[boxes.length/2-1][0]=2;
+			boxes[boxes.length/2-1][1]=2;
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2-1][3]=2;
 		}
 		
 		//J-piece

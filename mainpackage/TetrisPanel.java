@@ -50,11 +50,7 @@ public class TetrisPanel extends JPanel implements Runnable{
 			}
 		}
 		
-		game.boxes[4][0]=2;
-		game.boxes[4][1]=2;
-		game.boxes[4][2]=2;
-		game.boxes[4][3]=2;
-		
+		game.generatePiece();
 		
 		this.setPreferredSize(new Dimension(width,height));
 		setFocusable(true);
@@ -71,26 +67,31 @@ public class TetrisPanel extends JPanel implements Runnable{
 			for(int j=extraHeightForPiece;j<game.boxes[i].length;j++) {
 				if(game.boxes[i][j]==0) {
 					g.setColor(Color.GREEN);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2,
+							(getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 				if(game.boxes[i][j]==1) {
 					g.setColor(Color.BLUE);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2,
+							(getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 				if(game.boxes[i][j]==2) {
 					g.setColor(Color.RED);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2,
+							(getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 			}
 		}
 
 	}
 	
-	public void run(){										//starts frame drawing loop and starts the game loop
+	//starts frame drawing loop
+	//repaints the screen every 15 milliseconds (~60fps)
+	public void run(){
 		boolean running=true;
 		while(running){
 			
-			this.repaint();									//repaints the screen every 15 milliseconds (~60fps)
+			this.repaint();
 			
 			try {
 				Thread.sleep(15);
