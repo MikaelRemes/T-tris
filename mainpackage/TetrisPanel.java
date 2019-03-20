@@ -18,7 +18,7 @@ public class TetrisPanel extends JPanel implements Runnable{
 	private final int height = 800;
 	private final int boxesWidth = 10;
 	private final int boxesHeight = 20;
-	
+	private final int extraHeightForPiece=4;
 
 	
 	private GameState game;
@@ -26,7 +26,7 @@ public class TetrisPanel extends JPanel implements Runnable{
 
 	public TetrisPanel() {
 		
-		game = new GameState(boxesWidth, boxesHeight);
+		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
 		
 		addKeyListener(new KeyListener() {
 			@Override
@@ -68,18 +68,18 @@ public class TetrisPanel extends JPanel implements Runnable{
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		for(int i=0;i<game.boxes.length;i++) {
-			for(int j=0;j<game.boxes[i].length;j++) {
+			for(int j=extraHeightForPiece;j<game.boxes[i].length;j++) {
 				if(game.boxes[i][j]==0) {
 					g.setColor(Color.GREEN);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 				if(game.boxes[i][j]==1) {
 					g.setColor(Color.BLUE);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 				if(game.boxes[i][j]==2) {
 					g.setColor(Color.RED);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, j*(getHeight()/game.boxes[0].length)+2, (getWidth()/game.boxes.length)-4, (getHeight()/game.boxes[0].length)-4);
+					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2, (getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 			}
 		}
@@ -87,7 +87,6 @@ public class TetrisPanel extends JPanel implements Runnable{
 	}
 	
 	public void run(){										//starts frame drawing loop and starts the game loop
-		
 		boolean running=true;
 		while(running){
 			
