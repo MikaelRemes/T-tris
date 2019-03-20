@@ -1,5 +1,6 @@
 package mainpackage;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
@@ -15,25 +16,38 @@ public class GameState implements Runnable{
 	//value of 2 in box means that space is occupied by player piece
 	//value of 1 in box means that space is occupied
 	//value of 0 in box means that space is not occupied
-	private int[][] nextBoxesGravity;	
+	private int[][] nextBoxesGravity;
+	private int[][] nextBoxesLineClear;
 	private int[][] nextBoxesMovement;
+	private int[][] nextBoxesRotationMovement;
 	
 	private boolean collision = false;
+	
+	private Point pivot = new Point(0,0);
 	
 	private Thread gamerunner;
 	
 	public GameState(int width, int height) {
 		boxes = new int[width][height];
 		nextBoxesGravity = new int[width][height];
+		nextBoxesLineClear = new int[width][height];
 		nextBoxesMovement = new int[width][height];
+		nextBoxesRotationMovement = new int[width][height];
 		
 		gamerunner=new Thread(this);
 		gamerunner.start();
 	}
 	
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+			System.out.println("Down pressed");
+			doGravity();
+		}
+	}
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
 			System.out.println("Up pressed");
+			rotatePieceCCW();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			System.out.println("Left pressed");
@@ -42,9 +56,6 @@ public class GameState implements Runnable{
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			System.out.println("Right pressed");
 			moveRight();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			System.out.println("Down pressed");
 		}
 	}
 	
@@ -56,7 +67,7 @@ public class GameState implements Runnable{
 			System.out.println("one tick");
 			
 			try {
-				Thread.sleep(150);
+				Thread.sleep(800);
 			} catch (InterruptedException e) {
 				running=false;
 				e.printStackTrace();
@@ -96,8 +107,7 @@ public class GameState implements Runnable{
 		
 		
 		for(int i=0;i<boxes.length;i++) {
-			for(int j=0;j<boxes[i].length;j++) {
-				
+			for(int j=0;j<boxes[i].length;j++) {	
 				//if empty box
 				if(boxes[i][j] == 0) {
 					//if not at the top of the screen
@@ -106,12 +116,10 @@ public class GameState implements Runnable{
 						if(boxes[i][j-1] !=2)nextBoxesGravity[i][j] = 0;
 					}else nextBoxesGravity[i][j] = 0;
 				}
-				
 				//if frozen box
 				if(boxes[i][j] == 1) {
 					nextBoxesGravity[i][j] = 1;
 				}
-				
 				//if player controlled box
 				if(boxes[i][j] == 2) {
 					//the box below will be set to 2 and the box above to 0 (if not at the top of screen)
@@ -128,8 +136,61 @@ public class GameState implements Runnable{
 			System.arraycopy(nextBoxesGravity[k], 0, boxes[k], 0, nextBoxesGravity[k].length);
 		}
 		
-		if(collision)generatePiece();
-		collision=false;
+		pivot.y++;
+		
+		if(collision) {
+			clearLines();
+			generatePiece();
+			collision=false;
+		}
+		
+	}
+	
+	//clear all lines
+	//return value for how many lines cleared
+	public int clearLines() {
+		int lines=0;
+		for(int i=0;i<boxes.length;i++) {
+			for(int j=0;j<boxes[i].length;j++) {
+				//if empty box
+				if(boxes[i][j] == 0)nextBoxesLineClear[i][j] = 0;
+				//if frozen box
+				if(boxes[i][j] == 1)nextBoxesLineClear[i][j] = 1;				
+				//if player controlled box
+				if(boxes[i][j] == 2)nextBoxesLineClear[i][j] = 2;
+			}
+		}
+		
+		
+		boolean line=false;
+		for(int j=0;j<boxes[0].length;j++) {
+			line=true;
+			for(int i=0;i<boxes.length;i++) {
+				if(boxes[i][j] == 0) {
+					line=false;
+				}
+			}
+			if(line) {
+				for(int i=0;i<boxes.length;i++) {
+					nextBoxesLineClear[i][j] = 0;
+					for(int k=j;k>=3;k--) {
+						if(nextBoxesLineClear[i][k-1] == 1) {
+							nextBoxesLineClear[i][k] = 1;
+							nextBoxesLineClear[i][k-1] = 0;
+						}
+					}
+				}
+			}
+		}
+		
+		//copy next boxes state into boxes
+		for(int k=0;k<boxes.length;k++) {
+			System.arraycopy(nextBoxesLineClear[k], 0, boxes[k], 0, nextBoxesLineClear[k].length);
+		}
+		
+		return lines;
+		
+		
 	}
 	
 	
@@ -161,6 +222,7 @@ public class GameState implements Runnable{
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesMovement[k], 0, boxes[k], 0, nextBoxesMovement[k].length);
 		}
+		pivot.x--;
 		return true;
 	}
 	
@@ -192,6 +254,70 @@ public class GameState implements Runnable{
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesMovement[k], 0, boxes[k], 0, nextBoxesMovement[k].length);
 		}
+		pivot.x++;
+		return true;
+	}
+	
+	//return true if no collision
+	public boolean rotatePieceCCW() {
+		int newTempX=0;
+		int newTempY=0;
+		int newX=0;
+		int newY=0;
+		
+		for(int i=boxes.length-1;i>=0;i--) {
+			for(int j=0;j<boxes[i].length;j++) {
+				//if empty box
+				if(boxes[i][j] == 0) {
+					nextBoxesRotationMovement[i][j] = 0;
+				}
+				//if frozen box
+				if(boxes[i][j] == 1) {
+					nextBoxesRotationMovement[i][j] = 1;
+				}
+			}
+		}
+		
+		for(int i=boxes.length-1;i>=0;i--) {
+			for(int j=0;j<boxes[i].length;j++) {
+				if(boxes[i][j] == 2) {
+					newTempX=i-pivot.x;
+					newTempY=j-pivot.y;
+					
+					newX = newTempY*(-1);
+					newY = newTempX;
+					
+					newX += pivot.x;
+					newY += pivot.y;
+					
+					System.out.println("Pivot X:" + pivot.x + " Pivot Y:" + pivot.y);
+					System.out.println(newX);
+					System.out.println(newY);
+					
+					if(newX < 0 || newY < 0)return false;
+					
+					if(boxes[newX][newY] == 1) {
+						return false;
+					}else {
+						if(nextBoxesRotationMovement[i][j] != 2) nextBoxesRotationMovement[i][j]=0;
+						nextBoxesRotationMovement[newX][newY] = 2;
+					}
+					
+				}
+			}
+		}
+		
+		//copy next boxes state into boxes
+		for(int k=0;k<boxes.length;k++) {
+			System.arraycopy(nextBoxesRotationMovement[k], 0, boxes[k], 0, nextBoxesRotationMovement[k].length);
+		}
+		
+		for(int i=nextBoxesRotationMovement.length-1;i>=0;i--) {
+			for(int j=0;j<nextBoxesRotationMovement[i].length;j++) {
+				if(nextBoxesRotationMovement[i][j] == 2)nextBoxesRotationMovement[i][j]=0;
+			}
+		}
+		
 		return true;
 	}
 	
@@ -205,6 +331,7 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][1]=2;
 			boxes[boxes.length/2-1][2]=2;
 			boxes[boxes.length/2-1][3]=2;
+			pivot=new Point(boxes.length/2-1,1);
 		}
 		
 		//J-piece
@@ -213,6 +340,7 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][2]=2;
 			boxes[boxes.length/2-1][3]=2;
 			boxes[boxes.length/2-2][3]=2;
+			pivot=new Point(boxes.length/2-1,2);
 		}
 		
 		//L-piece
@@ -220,7 +348,8 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][1]=2;
 			boxes[boxes.length/2-1][2]=2;
 			boxes[boxes.length/2-1][3]=2;
-			boxes[boxes.length/2][3]=2;				
+			boxes[boxes.length/2][3]=2;
+			pivot=new Point(boxes.length/2-1,2);
 		}				
 		
 		//O-piece
@@ -228,7 +357,8 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][2]=2;
 			boxes[boxes.length/2][2]=2;
 			boxes[boxes.length/2-1][3]=2;
-			boxes[boxes.length/2][3]=2;						
+			boxes[boxes.length/2][3]=2;
+			pivot=new Point(boxes.length/2-1,2);
 		}
 		
 		//S-piece
@@ -236,7 +366,8 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2][1]=2;
 			boxes[boxes.length/2][2]=2;
 			boxes[boxes.length/2-1][2]=2;
-			boxes[boxes.length/2-1][3]=2;						
+			boxes[boxes.length/2-1][3]=2;
+			pivot=new Point(boxes.length/2-1,2);
 		}
 		
 		//T-piece
@@ -245,6 +376,7 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-2][3]=2;
 			boxes[boxes.length/2-1][3]=2;
 			boxes[boxes.length/2][3]=2;
+			pivot=new Point(boxes.length/2-1,3);
 		}
 		
 		//Z-piece
@@ -253,6 +385,7 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][2]=2;
 			boxes[boxes.length/2][2]=2;
 			boxes[boxes.length/2][3]=2;
+			pivot=new Point(boxes.length/2-1,2);
 		}
 		
 	}

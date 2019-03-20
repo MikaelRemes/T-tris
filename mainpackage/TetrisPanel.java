@@ -3,8 +3,6 @@ package mainpackage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -40,7 +38,7 @@ public class TetrisPanel extends JPanel implements Runnable{
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-
+				game.keyPressed(e);
 			}
 		});
 		
