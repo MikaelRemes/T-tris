@@ -50,16 +50,10 @@ public class TetrisPanel extends JPanel implements Runnable{
 			}
 		}
 		
-		//for testing purpouses
-		game.boxes[0][2]=1;
-		game.boxes[0][3]=1;
-		game.boxes[0][4]=1;
-		game.boxes[1][2]=1;
-		
-		game.boxes[1][0]=2;
-		game.boxes[1][1]=2;
-		game.boxes[1][2]=2;
-		game.boxes[1][3]=2;
+		game.boxes[4][0]=2;
+		game.boxes[4][1]=2;
+		game.boxes[4][2]=2;
+		game.boxes[4][3]=2;
 		
 		
 		this.setPreferredSize(new Dimension(width,height));
