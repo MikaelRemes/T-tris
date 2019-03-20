@@ -56,7 +56,7 @@ public class GameState implements Runnable{
 			System.out.println("one tick");
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(150);
 			} catch (InterruptedException e) {
 				running=false;
 				e.printStackTrace();
@@ -103,7 +103,7 @@ public class GameState implements Runnable{
 					//if not at the top of the screen
 					if(j>=1) {
 						//if the box above isn't player controlled
-						if(nextBoxesGravity[i][j-1] !=2)nextBoxesGravity[i][j] = 0;
+						if(boxes[i][j-1] !=2)nextBoxesGravity[i][j] = 0;
 					}else nextBoxesGravity[i][j] = 0;
 				}
 				
@@ -199,8 +199,6 @@ public class GameState implements Runnable{
 		Random rng = new Random();
 		int nextpiece=rng.nextInt(7);
 		
-		nextpiece=0;
-		
 		//I-piece
 		if(nextpiece==0) {
 			boxes[boxes.length/2-1][0]=2;
@@ -211,32 +209,50 @@ public class GameState implements Runnable{
 		
 		//J-piece
 		if(nextpiece==1) {
-					
+			boxes[boxes.length/2-1][1]=2;
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2-1][3]=2;
+			boxes[boxes.length/2-2][3]=2;
 		}
 		
 		//L-piece
 		if(nextpiece==2) {
-							
+			boxes[boxes.length/2-1][1]=2;
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2-1][3]=2;
+			boxes[boxes.length/2][3]=2;				
 		}				
 		
 		//O-piece
 		if(nextpiece==3) {
-									
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2][2]=2;
+			boxes[boxes.length/2-1][3]=2;
+			boxes[boxes.length/2][3]=2;						
 		}
 		
 		//S-piece
 		if(nextpiece==4) {
-									
+			boxes[boxes.length/2][1]=2;
+			boxes[boxes.length/2][2]=2;
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2-1][3]=2;						
 		}
 		
 		//T-piece
 		if(nextpiece==5) {
-			
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2-2][3]=2;
+			boxes[boxes.length/2-1][3]=2;
+			boxes[boxes.length/2][3]=2;
 		}
 		
 		//Z-piece
 		if(nextpiece==6) {
-			
+			boxes[boxes.length/2-1][1]=2;
+			boxes[boxes.length/2-1][2]=2;
+			boxes[boxes.length/2][2]=2;
+			boxes[boxes.length/2][3]=2;
 		}
 		
 	}
