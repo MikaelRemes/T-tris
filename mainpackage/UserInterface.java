@@ -6,36 +6,64 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class UserInterface extends JFrame{
+public class UserInterface extends JFrame implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private final int tetrisWidth = 400;
+	private final int tetrisHeight = 800;
+	private final int statsWidth = 400;
+	private final int statsHeight = 200;
+	private final int boxesWidth = 10;
+	private final int boxesHeight = 20;
+	private final int extraHeightForPiece=4;
+	
 	private TetrisPanel tetrispanel;
+	private StatsPanel statspanel;
+	
+	public GameState game;
 		
 	public UserInterface() {
+		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
 		
-
 		this.setTitle("Tötris");
-		tetrispanel = new TetrisPanel();
+		//make tetrispanel
+		tetrispanel = new TetrisPanel(game, tetrisWidth, tetrisHeight);
+		//make statspanel
+		statspanel = new StatsPanel(game, statsWidth,statsHeight);
+		
 		this.getContentPane().setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//stops user from resizing screen
 		this.setResizable(false);
-		
-		
-		
-		//adds tetris gamepanel to JFrame
-		this.add((JPanel) tetrispanel);
-		
-		//sets frame size to 400 by 800
-		this.setSize(400, 800);
-		
+		//adds tetris gamepanels to JFrame
+		this.add((JPanel) statspanel, BorderLayout.NORTH);
+		this.add((JPanel) tetrispanel, BorderLayout.SOUTH);
+		//sets frame size to sum of heights=800+200, width 400
+		this.setSize(tetrisWidth, tetrisHeight+statsHeight);
 		//pack helps to center game on screen when jframe is set visible
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-			
-		tetrispanel.run();
+		
+		this.run();
+	}
+	
+	//starts frame drawing loop
+	//repaints the screen every 15 milliseconds (~60fps)
+	public void run(){
+		boolean running=true;
+		while(running){
+			tetrispanel.repaint();
+			statspanel.update();
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				running=false;
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

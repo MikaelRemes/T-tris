@@ -26,6 +26,8 @@ public class GameState implements Runnable{
 	private Point pivot = new Point(0,0);
 	
 	private Thread gamerunner;
+	public int level=1;
+	public long points=0;
 	
 	public GameState(int width, int height) {
 		boxes = new int[width][height];
@@ -61,6 +63,7 @@ public class GameState implements Runnable{
 	
 	public void run() {
 		boolean running=true;
+		generatePiece();
 		while(running){
 			
 			doGravity();
@@ -139,7 +142,7 @@ public class GameState implements Runnable{
 		pivot.y++;
 		
 		if(collision) {
-			clearLines();
+			points += clearLines();
 			generatePiece();
 			collision=false;
 		}
@@ -171,6 +174,7 @@ public class GameState implements Runnable{
 				}
 			}
 			if(line) {
+				lines++;
 				for(int i=0;i<boxes.length;i++) {
 					nextBoxesLineClear[i][j] = 0;
 					for(int k=j;k>=3;k--) {
@@ -275,6 +279,7 @@ public class GameState implements Runnable{
 				if(boxes[i][j] == 1) {
 					nextBoxesRotationMovement[i][j] = 1;
 				}
+				if(boxes[i][j] == 2)nextBoxesRotationMovement[i][j]=0;
 			}
 		}
 		
@@ -294,7 +299,7 @@ public class GameState implements Runnable{
 					System.out.println(newX);
 					System.out.println(newY);
 					
-					if(newX < 0 || newY < 0)return false;
+					if(newX < 0 || newY < 0 || newX >= boxes.length || newY >= boxes[i].length)return false;
 					
 					if(boxes[newX][newY] == 1) {
 						return false;
@@ -310,12 +315,6 @@ public class GameState implements Runnable{
 		//copy next boxes state into boxes
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesRotationMovement[k], 0, boxes[k], 0, nextBoxesRotationMovement[k].length);
-		}
-		
-		for(int i=nextBoxesRotationMovement.length-1;i>=0;i--) {
-			for(int j=0;j<nextBoxesRotationMovement[i].length;j++) {
-				if(nextBoxesRotationMovement[i][j] == 2)nextBoxesRotationMovement[i][j]=0;
-			}
 		}
 		
 		return true;

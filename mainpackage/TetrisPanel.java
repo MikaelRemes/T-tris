@@ -9,22 +9,18 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 
-public class TetrisPanel extends JPanel implements Runnable{
+public class TetrisPanel extends JPanel{
 	
 	private static final long serialVersionUID = 2L;
-	private final int width = 400;
-	private final int height = 800;
-	private final int boxesWidth = 10;
-	private final int boxesHeight = 20;
 	private final int extraHeightForPiece=4;
 
 	
 	private GameState game;
 	
 
-	public TetrisPanel() {
+	public TetrisPanel(GameState game, int width, int height) {
 		
-		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
+		this.game=game;
 		
 		addKeyListener(new KeyListener() {
 			@Override
@@ -48,11 +44,8 @@ public class TetrisPanel extends JPanel implements Runnable{
 			}
 		}
 		
-		game.generatePiece();
-		
 		this.setPreferredSize(new Dimension(width,height));
 		setFocusable(true);
-		
 	}
 	
 	@Override
@@ -64,9 +57,9 @@ public class TetrisPanel extends JPanel implements Runnable{
 		for(int i=0;i<game.boxes.length;i++) {
 			for(int j=extraHeightForPiece;j<game.boxes[i].length;j++) {
 				if(game.boxes[i][j]==0) {
-					g.setColor(Color.GREEN);
-					g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2,
-							(getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
+					//g.setColor(Color.GREEN);
+					//g.fillRect(i*(getWidth()/game.boxes.length)+2, (j-extraHeightForPiece)*(getHeight()/(game.boxes[0].length-extraHeightForPiece))+2,
+					//		(getWidth()/game.boxes.length)-4, (getHeight()/(game.boxes[0].length-extraHeightForPiece))-4);
 				}
 				if(game.boxes[i][j]==1) {
 					g.setColor(Color.BLUE);
@@ -82,23 +75,4 @@ public class TetrisPanel extends JPanel implements Runnable{
 		}
 
 	}
-	
-	//starts frame drawing loop
-	//repaints the screen every 15 milliseconds (~60fps)
-	public void run(){
-		boolean running=true;
-		while(running){
-			
-			this.repaint();
-			
-			try {
-				Thread.sleep(15);
-			} catch (InterruptedException e) {
-				running=false;
-				e.printStackTrace();
-			}
-		}
-	}
-	
-
 }
