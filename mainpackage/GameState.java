@@ -108,7 +108,7 @@ public class GameState implements Runnable{
 			}
 		}
 		
-		
+		//drop all player controlled boxes by 1 and replace with air if box above isn't player controlled
 		for(int i=0;i<boxes.length;i++) {
 			for(int j=0;j<boxes[i].length;j++) {	
 				//if empty box
@@ -186,15 +186,11 @@ public class GameState implements Runnable{
 				}
 			}
 		}
-		
 		//copy next boxes state into boxes
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesLineClear[k], 0, boxes[k], 0, nextBoxesLineClear[k].length);
 		}
-		
 		return lines;
-		
-		
 	}
 	
 	
