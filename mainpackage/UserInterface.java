@@ -2,6 +2,8 @@ package mainpackage;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -69,8 +71,19 @@ public class UserInterface extends JFrame implements Runnable{
 		}
 	}
 	
+	//TODO: fix saving
 	public void gameOver() {
-		JOptionPane.showMessageDialog(this, "Game over");
+		game.stop();
+		if(game.points>game.highScore) {
+			try {
+				FileOutputStream fos = new FileOutputStream(new File("./Highscore.txt"));
+				fos.write((int) game.highScore);
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		JOptionPane.showMessageDialog(this, "Game over, your score: " + game.points);
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 

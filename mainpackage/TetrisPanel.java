@@ -13,15 +13,10 @@ public class TetrisPanel extends JPanel{
 	
 	private static final long serialVersionUID = 2L;
 	private final int extraHeightForPiece=4;
-
-	
 	private GameState game;
 	
-
 	public TetrisPanel(GameState game, int width, int height) {
-		
 		this.game=game;
-		
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -37,17 +32,11 @@ public class TetrisPanel extends JPanel{
 				game.keyPressed(e);
 			}
 		});
-		
-		for(int[] xAxisBoxes : game.boxes) {
-			for(@SuppressWarnings("unused") int yAxisBox : xAxisBoxes) {
-				yAxisBox=0;
-			}
-		}
-		
 		this.setPreferredSize(new Dimension(width,height));
 		setFocusable(true);
 	}
 	
+	//TODO: possibly different colour for different pieces
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

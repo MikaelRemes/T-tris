@@ -2,6 +2,8 @@ package mainpackage;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Random;
 
 public class GameState implements Runnable{
@@ -23,11 +25,23 @@ public class GameState implements Runnable{
 	
 	public boolean gameOver=false;
 	
+	//pivot point for piece rotation
 	private Point pivot = new Point(0,0);
 	
+	//thread for gameloop
 	private Thread gamerunner;
+	private boolean running=false;
+	
+	//level, level point threshold, point and high score
 	public int level=1;
+	public int levelPointThreshold=500;
 	public long points=0;
+	public long highScore=0;
+	
+	//speed of how fast gameloop goes and how much does level decrement it
+	private int tickspeed=800;
+	private double levelMultiplier=0.90;
+	
 	
 	public GameState(int width, int height) {
 		boxes = new int[width][height];
@@ -35,6 +49,11 @@ public class GameState implements Runnable{
 		nextBoxesLineClear = new int[width][height];
 		nextBoxesMovement = new int[width][height];
 		nextBoxesRotationMovement = new int[width][height];
+		for(int[] xAxisBoxes : boxes) {
+			for(@SuppressWarnings("unused") int yAxisBox : xAxisBoxes) {
+				yAxisBox=0;
+			}
+		}
 		
 		gamerunner=new Thread(this);
 		gamerunner.start();
@@ -62,15 +81,16 @@ public class GameState implements Runnable{
 	}
 	
 	public void run() {
-		boolean running=true;
+		running=true;
 		generatePiece();
+		loadHighScore();
 		while(running){
 			
 			doGravity();
 			System.out.println("one tick");
 			
 			try {
-				Thread.sleep(800);
+				Thread.sleep(tickspeed);
 			} catch (InterruptedException e) {
 				running=false;
 				e.printStackTrace();
@@ -78,6 +98,22 @@ public class GameState implements Runnable{
 		}
 	}
 	
+	public void stop() {
+		running=false;
+	}
+	
+	//TODO: fix loading
+	public void loadHighScore() {
+		try {
+			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));
+			highScore=fis.read();
+			fis.close();
+			System.out.println("Your highscore: " + highScore);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public void doGravity() {
 		boolean collision=false;
@@ -146,7 +182,23 @@ public class GameState implements Runnable{
 		pivot.y++;
 		
 		if(collision) {
-			points += clearLines();
+			int lines = clearLines();
+			if(lines==1) {
+				points += 100;
+			}
+			if(lines==2) {
+				points += 250;
+			}
+			if(lines==3) {
+				points += 500;
+			}
+			if(lines==4) {
+				points += 1000;
+			}
+			if(lines>=1) {
+				level=(int) (points/levelPointThreshold);
+				tickspeed=Math.max(50, (int) (tickspeed*Math.pow(levelMultiplier, level)));
+			}
 			generatePiece();
 			collision=false;
 		}
