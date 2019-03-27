@@ -21,7 +21,7 @@ public class GameState implements Runnable{
 	private int[][] nextBoxesMovement;
 	private int[][] nextBoxesRotationMovement;
 	
-	private boolean collision = false;
+	public boolean gameOver=false;
 	
 	private Point pivot = new Point(0,0);
 	
@@ -80,8 +80,9 @@ public class GameState implements Runnable{
 	
 	
 	public void doGravity() {
+		boolean collision=false;
 		
-		//check collisions
+		//check collisions and game overs
 		for(int i=0;i<boxes.length;i++) {
 			for(int j=0;j<boxes[i].length;j++) {		
 				if(boxes[i][j] == 2) {
@@ -91,6 +92,9 @@ public class GameState implements Runnable{
 					else {
 						if(boxes[i][j+1] == 1) {
 							collision=true;
+							if(j<3) {
+								gameOver=true;
+							}
 						}
 					}
 				}

@@ -1,8 +1,10 @@
 package mainpackage;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -57,6 +59,7 @@ public class UserInterface extends JFrame implements Runnable{
 		while(running){
 			tetrispanel.repaint();
 			statspanel.update();
+			if(game.gameOver)gameOver();
 			try {
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
@@ -64,6 +67,11 @@ public class UserInterface extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void gameOver() {
+		JOptionPane.showMessageDialog(this, "Game over");
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 
 }
