@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -77,8 +78,11 @@ public class UserInterface extends JFrame implements Runnable{
 		if(game.points>game.highScore) {
 			try {
 				FileOutputStream fos = new FileOutputStream(new File("./Highscore.txt"));
-				fos.write((int) game.highScore);
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject((long) game.points);
+				oos.close();
 				fos.close();
+				System.out.println("New highscore: " + game.points);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

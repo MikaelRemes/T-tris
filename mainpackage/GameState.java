@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.Random;
 
 public class GameState implements Runnable{
@@ -106,9 +107,11 @@ public class GameState implements Runnable{
 	public void loadHighScore() {
 		try {
 			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));
-			highScore=fis.read();
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			highScore= (long) ois.readObject();
+			ois.close();
 			fis.close();
-			System.out.println("Your highscore: " + highScore);
+			System.out.println("Current highscore: " + highScore);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
