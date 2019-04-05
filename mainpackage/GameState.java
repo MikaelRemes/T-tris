@@ -60,6 +60,7 @@ public class GameState implements Runnable{
 		gamerunner.start();
 	}
 	
+	//piece movement based on player input
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
 			System.out.println("Down pressed");
@@ -184,6 +185,7 @@ public class GameState implements Runnable{
 		
 		pivot.y++;
 		
+		//points based on amount of lines cleared
 		if(collision) {
 			int lines = clearLines();
 			if(lines==1) {
@@ -375,6 +377,7 @@ public class GameState implements Runnable{
 		return true;
 	}
 	
+	//generate a new piece, shape chosen randomly
 	public void generatePiece() {
 		Random rng = new Random();
 		int nextpiece=rng.nextInt(7);
