@@ -104,7 +104,6 @@ public class GameState implements Runnable{
 		running=false;
 	}
 	
-	//TODO: fix loading
 	public void loadHighScore() {
 		try {
 			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));
@@ -200,6 +199,8 @@ public class GameState implements Runnable{
 			if(lines==4) {
 				points += 1000;
 			}
+			//if a line is cleared, check if level is increased
+			//and adjust tickspeed accordingly
 			if(lines>=1) {
 				level=(int) (points/levelPointThreshold);
 				tickspeed=Math.max(50, (int) (tickspeed*Math.pow(levelMultiplier, level)));
@@ -352,9 +353,10 @@ public class GameState implements Runnable{
 					newX += pivot.x;
 					newY += pivot.y;
 					
-					System.out.println("Pivot X:" + pivot.x + " Pivot Y:" + pivot.y);
-					System.out.println(newX);
-					System.out.println(newY);
+					//System.out.println("Pivot X:" + pivot.x + " Pivot Y:" + pivot.y);
+					//System.out.println(newX);
+					//System.out.println(newY);
+					System.out.println("Piece rotated");
 					
 					if(newX < 0 || newY < 0 || newX >= boxes.length || newY >= boxes[i].length)return false;
 					

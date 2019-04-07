@@ -30,8 +30,8 @@ public class UserInterface extends JFrame implements Runnable{
 		
 	public UserInterface() {
 		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
-		
 		this.setTitle("Tötris");
+		
 		//make tetrispanel
 		tetrispanel = new TetrisPanel(game, tetrisWidth, tetrisHeight);
 		//make statspanel
@@ -55,8 +55,11 @@ public class UserInterface extends JFrame implements Runnable{
 		this.run();
 	}
 	
-	//starts frame drawing loop
-	//repaints the screen every 15 milliseconds (~60fps)
+	/**
+	 * starts frame drawing loop
+	 * repaints the screen every 15 milliseconds (~60fps)
+	 * updates the statspanel and checks for gameover
+	 */
 	public void run(){
 		boolean running=true;
 		while(running){
@@ -72,7 +75,9 @@ public class UserInterface extends JFrame implements Runnable{
 		}
 	}
 	
-	//TODO: fix saving
+	/**
+	 * saves highscores and closes the application
+	 */
 	public void gameOver() {
 		game.stop();
 		if(game.points>game.highScore) {
