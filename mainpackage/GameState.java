@@ -184,7 +184,7 @@ public class GameState implements Runnable{
 		
 		pivot.y++;
 		
-		//points based on amount of lines cleared
+		//points based on number of lines cleared
 		if(collision) {
 			int lines = clearLines();
 			if(lines==1) {
