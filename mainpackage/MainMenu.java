@@ -1,5 +1,7 @@
 package mainpackage;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,18 +31,26 @@ public class MainMenu extends JFrame{
 		
 		this.setPreferredSize(new Dimension(500,500));
 		
-		startGameButton.addActionListener(buttonListener);
-		this.add(startGameButton);
+		makeButton(startGameButton);
 		testRunButton.addActionListener(buttonListener);
 		this.add(testRunButton);
 		resetButton.addActionListener(buttonListener);
 		this.add(resetButton);
-		quitButton.addActionListener(buttonListener);
-		this.add(quitButton);
+		makeButton(quitButton);
 		
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+	
+	private void makeButton(JButton button){
+		button.addActionListener(buttonListener);
+		button.setBackground(new Color(0, 46, 255));
+		if(button == quitButton)button.setBackground(new Color(255,60,90));
+		button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Tahoma", Font.BOLD, 12));
+		this.add(button);
 	}
 	
 	private class ButtonListener implements ActionListener{
