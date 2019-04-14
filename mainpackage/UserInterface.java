@@ -27,6 +27,10 @@ public class UserInterface extends JFrame implements Runnable{
 	private StatsPanel statspanel;
 	
 	public GameState game;
+	
+	//thread for loop
+	private Thread looprunner;
+	private boolean running=false;
 		
 	public UserInterface() {
 		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
@@ -52,7 +56,8 @@ public class UserInterface extends JFrame implements Runnable{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
-		this.run();
+		looprunner=new Thread(this);
+		looprunner.start();
 	}
 	
 	/**
@@ -61,7 +66,7 @@ public class UserInterface extends JFrame implements Runnable{
 	 * updates the statspanel and checks for gameover
 	 */
 	public void run(){
-		boolean running=true;
+		running=true;
 		while(running){
 			tetrispanel.repaint();
 			statspanel.update();
