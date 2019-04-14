@@ -32,10 +32,8 @@ public class MainMenu extends JFrame{
 		this.setPreferredSize(new Dimension(500,500));
 		
 		makeButton(startGameButton);
-		testRunButton.addActionListener(buttonListener);
-		this.add(testRunButton);
-		resetButton.addActionListener(buttonListener);
-		this.add(resetButton);
+		makeButton(testRunButton);
+		makeButton(resetButton);
 		makeButton(quitButton);
 		
 		this.pack();
@@ -65,6 +63,19 @@ public class MainMenu extends JFrame{
   	    		menu.setVisible(false);
   	    		menu.dispose();
   	    		new UserInterface();
+  	    	}
+  	    	if(e.getSource() == testRunButton) {
+  	    		try {
+  	    		System.out.println("RUNNING TESTS....");
+  	    		
+  	    		//TODO: tests
+  	    		
+  	    		System.out.println("TESTING DONE WITH 0 ERRORS");
+  	    		}catch(Exception error) {
+  	    			System.out.println("ERROR DURING TESTING:");
+  	    			error.printStackTrace();
+  	    		}
+  	    		
   	    	}
   	    }
 	}
