@@ -62,6 +62,7 @@ public class MainMenu extends JFrame{
 			this.menu=menu;
 		}
 		
+		//TODO: make quitbutton (see userinterface gameover) and resetbutton work (save a highscore of 0 or something, see userinterface gameover)
   	    public void actionPerformed(ActionEvent e) {
   	    	if(e.getSource() == startGameButton) {
   	    		menu.setVisible(false);
