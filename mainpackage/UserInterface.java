@@ -97,6 +97,7 @@ public class UserInterface extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		//TODO: tell player if he got a new highscore
 		JOptionPane.showMessageDialog(this, "Game over, your score: " + game.points);
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}

@@ -12,7 +12,8 @@ public class StatsPanel extends JPanel{
 	private JLabel pointsLabel = new JLabel();
 	private JLabel levelLabel = new JLabel();
 	private JLabel highScoreLabel = new JLabel();
-
+	
+	//TODO: make statspanel prettier
 	public StatsPanel(GameState game, int width, int height) {
 		this.game=game;
 		this.setSize(width,height);

@@ -5,9 +5,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 
 public class MainMenu extends JFrame{
@@ -68,17 +72,39 @@ public class MainMenu extends JFrame{
   	    		try {
   	    		System.out.println("RUNNING TESTS....");
   	    		
-  	    		//TODO: tests
+  	    		long highScore = doHighScoreFilesTest();
+  	    		if(highScore!=-1) {
+  	    			System.out.print("Found highscore, current highscore: ");
+  	    			System.out.println("" + highScore);
+  	    		}else {
+  	    			System.out.println("Could not find highscore");
+  	    		}
   	    		
-  	    		System.out.println("TESTING DONE WITH 0 ERRORS");
+  	    		JOptionPane.showMessageDialog(menu, "Testing done \nAll necessary files found \nHighscore: " + highScore);
+  	    		System.out.println("TESTING DONE");
   	    		}catch(Exception error) {
-  	    			System.out.println("ERROR DURING TESTING:");
+  	    			System.out.println("ERROR:");
   	    			error.printStackTrace();
+  	    			JOptionPane.showMessageDialog(menu, "ERROR IN TESTING \n SEE DEVELOPER CONSOLE");
   	    		}
   	    		
   	    	}
   	    }
 	}
+	
+	public long doHighScoreFilesTest() {
+		try {
+			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			long highScore = (long) ois.readObject();
+			ois.close();
+			fis.close();
+			return highScore;
+		}catch(Exception e) {
+			return -1;
+		}
+	}
+
 	
 
 }
