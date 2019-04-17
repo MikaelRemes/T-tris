@@ -15,26 +15,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
+/**
+ * Main menu
+ */
 public class MainMenu extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3L;
 	JButton startGameButton = new JButton("START GAME");
 	JButton testRunButton = new JButton("TEST RUN");
 	JButton resetButton = new JButton("RESET FILES");
 	JButton quitButton = new JButton("QUIT");
 	ButtonListener buttonListener = new ButtonListener(this);
-
+	
+	/**
+	 * Constructor
+	 * Creates the JFrame and buttons for main menu.
+	 */
 	public MainMenu() {
-		
 		this.setResizable(false);
-		
 		this.getContentPane().setLayout(new GridLayout(4,1));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		this.setPreferredSize(new Dimension(500,500));
 		
 		makeButton(startGameButton);
@@ -47,6 +47,10 @@ public class MainMenu extends JFrame{
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Creates a button for main menu.
+	 * @param button, a button to be created
+	 */
 	private void makeButton(JButton button){
 		button.addActionListener(buttonListener);
 		button.setBackground(new Color(0, 46, 255));
@@ -57,14 +61,23 @@ public class MainMenu extends JFrame{
 		this.add(button);
 	}
 	
+	/**
+	 * Listens to the button presses and acts accordingly.
+	 */
 	private class ButtonListener implements ActionListener{
 		private MainMenu menu;
 		
+		/**
+		 * Constructor
+		 * @param menu, main menu
+		 */
 		private ButtonListener(MainMenu menu) {
 			this.menu=menu;
 		}
 		
-		//TODO: make quitbutton (see userinterface gameover method) and resetbutton work (save a highscore of 0 or something, see userinterface gameover method)
+		/**
+		 * Listens to the button presses and acts accordingly.
+		 */
   	    public void actionPerformed(ActionEvent e) {
   	    	if(e.getSource() == startGameButton) {
   	    		menu.setVisible(false);
@@ -111,6 +124,9 @@ public class MainMenu extends JFrame{
   	    }
 	}
 	
+	/**
+	 * Runs the test for high score file's existence and value.
+	 */
 	public long doHighScoreFilesTest() {
 		try {
 			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));

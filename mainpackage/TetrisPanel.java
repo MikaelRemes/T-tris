@@ -8,15 +8,27 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
-
+/**
+ * Displays the game.
+ */
 public class TetrisPanel extends JPanel{
 	
 	private static final long serialVersionUID = 2L;
 	private final int extraHeightForPiece=4;
-	private GameState game;
 	
+	/** Object that holds the state of the game logic */
+	private GameState game;
+	/** Background color */
 	private Color backgroundColor = Color.BLACK;
 	
+	/**
+	 * Constructor
+	 * Listens to the key presses of the player
+	 * @param game, the game logic object.
+	 * @param width, width of the panel
+	 * @param height, height of the panel
+	 * 
+	 */
 	public TetrisPanel(GameState game, int width, int height) {
 		this.game=game;
 		addKeyListener(new KeyListener() {
@@ -38,6 +50,9 @@ public class TetrisPanel extends JPanel{
 		setFocusable(true);
 	}
 	
+	/**
+	 * Draws the screen graphics depending on the state of the game.
+	 */
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

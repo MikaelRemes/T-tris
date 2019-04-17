@@ -7,6 +7,9 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.Random;
 
+/**
+ * Takes care of the game logic during gameplay
+ */
 public class GameState implements Runnable{
 	
 	//represent the coordinates of tetris map
@@ -24,12 +27,13 @@ public class GameState implements Runnable{
 	private int[][] nextBoxesMovement;
 	private int[][] nextBoxesRotationMovement;
 	
+	/** true if game over, false otherwise */
 	public boolean gameOver=false;
 	
-	//pivot point for piece rotation
+	/** pivot point for piece rotation */
 	private Point pivot = new Point(0,0);
-	
-	//thread for gameloop
+
+	/** thread for game logic loop */
 	private Thread gamerunner;
 	private boolean running=false;
 	
@@ -39,11 +43,18 @@ public class GameState implements Runnable{
 	public long points=0;
 	public long highScore=0;
 	
-	//speed of how fast gameloop goes and how much does level decrement it
+	/** speed of how fast game loop goes, lower value means faster */
 	private int tickspeed=800;
+	 /** How much does level decrement gameloop speed, multiplies the tick speed */
 	private double levelMultiplier=0.90;
 	
-	
+	/**
+	 * Constructor
+	 * Creates the grid for the game
+	 * Starts the loop that takes care of gravity
+	 * @param width, width of the game grid
+	 * @param height, height of the game grid
+	 */
 	public GameState(int width, int height) {
 		boxes = new int[width][height];
 		nextBoxesGravity = new int[width][height];
@@ -60,13 +71,19 @@ public class GameState implements Runnable{
 		gamerunner.start();
 	}
 	
-	//piece movement based on player input
+	/**
+	 * If down is pressed, moves piece down.
+	 * The key can be held down for faster drop.
+	 */
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
 			System.out.println("Down pressed");
 			doGravity();
 		}
 	}
+	/**
+	 * If a key is pressed, move the piece accordingly.
+	 */
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
 			System.out.println("Up pressed");
@@ -82,6 +99,9 @@ public class GameState implements Runnable{
 		}
 	}
 	
+	/**
+	 * Starts the loop.
+	 */
 	public void run() {
 		running=true;
 		generatePiece();
@@ -100,10 +120,16 @@ public class GameState implements Runnable{
 		}
 	}
 	
+	/**
+	 * Stops the loop.
+	 */
 	public void stop() {
 		running=false;
 	}
 	
+	/**
+	 * Loads the previous high score.
+	 */
 	public void loadHighScore() {
 		try {
 			FileInputStream fis = new FileInputStream(new File("./Highscore.txt"));
@@ -118,6 +144,10 @@ public class GameState implements Runnable{
 		
 	}
 	
+	/**
+	 * Takes care of gravity.
+	 * Detects collisions and game over states.
+	 */
 	public void doGravity() {
 		boolean collision=false;
 		
@@ -211,8 +241,10 @@ public class GameState implements Runnable{
 		
 	}
 	
-	//clear all lines
-	//return value for how many lines cleared
+	/**
+	 * Clear all lines.
+	 * @return integer value for how many lines cleared
+	 */
 	public int clearLines() {
 		int lines=0;
 		for(int i=0;i<boxes.length;i++) {
@@ -255,8 +287,10 @@ public class GameState implements Runnable{
 		return lines;
 	}
 	
-	
-	//return true if no collision
+	/**
+	 * Move the player controlled piece left.
+	 * @return true if no collision, false otherwise.
+	 */
 	public boolean moveLeft() {
 		for(int i=0;i<boxes.length;i++) {
 			for(int j=0;j<boxes[i].length;j++) {
@@ -288,7 +322,10 @@ public class GameState implements Runnable{
 		return true;
 	}
 	
-	//return true if no collision
+	/**
+	 * Move the player controlled piece right.
+	 * @return true if no collision, false otherwise.
+	 */
 	public boolean moveRight() {
 		for(int i=boxes.length-1;i>=0;i--) {
 			for(int j=0;j<boxes[i].length;j++) {
@@ -320,7 +357,10 @@ public class GameState implements Runnable{
 		return true;
 	}
 	
-	//return true if no collision
+	/**
+	 * Rotate the player controlled piece counter-clockwise.
+	 * @return true if no collision, false otherwise.
+	 */
 	public boolean rotatePieceCCW() {
 		int newTempX=0;
 		int newTempY=0;
@@ -378,7 +418,10 @@ public class GameState implements Runnable{
 		return true;
 	}
 	
-	//generate a new piece, shape chosen randomly
+	/**
+	 * Generate a new piece for player.
+	 * Piece chosen randomly.
+	 */
 	public void generatePiece() {
 		Random rng = new Random();
 		int nextpiece=rng.nextInt(7);

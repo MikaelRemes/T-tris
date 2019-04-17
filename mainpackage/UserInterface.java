@@ -9,7 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
+/**
+ * Takes care of the UI during gameplay
+ */
 public class UserInterface extends JFrame implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
@@ -25,13 +27,20 @@ public class UserInterface extends JFrame implements Runnable{
 	private TetrisPanel tetrispanel;
 	private StatsPanel statspanel;
 	
+	/** Object that holds the state of the game logic */
 	public GameState game;
 	
-	//thread for loop
+	/** Thread for graphics loop. */
 	private Thread looprunner;
 	private boolean running=false;
-		
+	
+	/**
+	 * Constructor
+	 * Creates the frame.
+	 * Creates the loop for graphics and object that takes care of game logic.
+	 */
 	public UserInterface() {
+		//create the object that takes care of game logic
 		game = new GameState(boxesWidth, boxesHeight+extraHeightForPiece);
 		this.setTitle("Tötris");
 		
@@ -50,19 +59,20 @@ public class UserInterface extends JFrame implements Runnable{
 		this.add((JPanel) tetrispanel, BorderLayout.SOUTH);
 		//sets frame size to sum of heights=800+200, width 400
 		this.setSize(tetrisWidth, tetrisHeight+statsHeight);
-		//pack helps to center game on screen when jframe is set visible
+		//pack helps to center game on screen when the JFrame is set visible
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
+		//start the loop that takes care of graphics
 		looprunner=new Thread(this);
 		looprunner.start();
 	}
 	
 	/**
-	 * starts frame drawing loop
-	 * repaints the screen every 15 milliseconds (~60fps)
-	 * updates the statspanel and checks for gameover
+	 * Starts frame drawing loop.
+	 * Repaints the screen every 15 milliseconds (~60fps)
+	 * Updates the panel that displays statistics and checks for game over.
 	 */
 	public void run(){
 		running=true;
@@ -80,7 +90,7 @@ public class UserInterface extends JFrame implements Runnable{
 	}
 	
 	/**
-	 * saves highscores, closes the application and opens up main menu
+	 * Saves high scores, closes screen, stops the loops that run the game and opens up main menu.
 	 */
 	public void gameOver() {
 		game.stop();
