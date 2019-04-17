@@ -375,7 +375,6 @@ public class GameState implements Runnable{
 		for(int k=0;k<boxes.length;k++) {
 			System.arraycopy(nextBoxesRotationMovement[k], 0, boxes[k], 0, nextBoxesRotationMovement[k].length);
 		}
-		
 		return true;
 	}
 	
@@ -383,7 +382,6 @@ public class GameState implements Runnable{
 	public void generatePiece() {
 		Random rng = new Random();
 		int nextpiece=rng.nextInt(7);
-		
 		//I-piece
 		if(nextpiece==0) {
 			boxes[boxes.length/2-1][0]=2;
@@ -392,7 +390,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][3]=2;
 			pivot=new Point(boxes.length/2-1,1);
 		}
-		
 		//J-piece
 		if(nextpiece==1) {
 			boxes[boxes.length/2-1][1]=2;
@@ -401,7 +398,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-2][3]=2;
 			pivot=new Point(boxes.length/2-1,2);
 		}
-		
 		//L-piece
 		if(nextpiece==2) {
 			boxes[boxes.length/2-1][1]=2;
@@ -410,7 +406,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2][3]=2;
 			pivot=new Point(boxes.length/2-1,2);
 		}				
-		
 		//O-piece
 		if(nextpiece==3) {
 			boxes[boxes.length/2-1][2]=2;
@@ -419,7 +414,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2][3]=2;
 			pivot=new Point(boxes.length/2-1,2);
 		}
-		
 		//S-piece
 		if(nextpiece==4) {
 			boxes[boxes.length/2][1]=2;
@@ -428,7 +422,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2-1][3]=2;
 			pivot=new Point(boxes.length/2-1,2);
 		}
-		
 		//T-piece
 		if(nextpiece==5) {
 			boxes[boxes.length/2-1][2]=2;
@@ -437,7 +430,6 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2][3]=2;
 			pivot=new Point(boxes.length/2-1,3);
 		}
-		
 		//Z-piece
 		if(nextpiece==6) {
 			boxes[boxes.length/2-1][1]=2;
@@ -446,8 +438,5 @@ public class GameState implements Runnable{
 			boxes[boxes.length/2][3]=2;
 			pivot=new Point(boxes.length/2-1,2);
 		}
-		
 	}
-	
-
 }

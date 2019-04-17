@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -62,7 +64,7 @@ public class MainMenu extends JFrame{
 			this.menu=menu;
 		}
 		
-		//TODO: make quitbutton (see userinterface gameover) and resetbutton work (save a highscore of 0 or something, see userinterface gameover)
+		//TODO: make quitbutton (see userinterface gameover method) and resetbutton work (save a highscore of 0 or something, see userinterface gameover method)
   	    public void actionPerformed(ActionEvent e) {
   	    	if(e.getSource() == startGameButton) {
   	    		menu.setVisible(false);
@@ -89,6 +91,22 @@ public class MainMenu extends JFrame{
   	    			JOptionPane.showMessageDialog(menu, "ERROR IN TESTING \n SEE DEVELOPER CONSOLE");
   	    		}
   	    		
+  	    	}
+  	    	if(e.getSource() == resetButton) {
+  	    		try {
+  					FileOutputStream fos = new FileOutputStream(new File("./Highscore.txt"));
+  					ObjectOutputStream oos = new ObjectOutputStream(fos);
+  					oos.writeObject((long) 0);
+  					oos.close();
+  					fos.close();
+  					System.out.println("Highscore has been reset");
+  				} catch (Exception error) {
+  					error.printStackTrace();
+  				}
+  	    	}
+  	    	if(e.getSource() == quitButton) {
+  	    		menu.setVisible(false);
+  	    		menu.dispose();
   	    	}
   	    }
 	}

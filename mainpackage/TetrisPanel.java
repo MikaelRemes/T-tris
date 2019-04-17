@@ -38,7 +38,6 @@ public class TetrisPanel extends JPanel{
 		setFocusable(true);
 	}
 	
-	//TODO: possibly different colour for different pieces
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

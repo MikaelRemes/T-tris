@@ -1,7 +1,6 @@
 package mainpackage;
 
 import java.awt.BorderLayout;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -81,10 +80,11 @@ public class UserInterface extends JFrame implements Runnable{
 	}
 	
 	/**
-	 * saves highscores and closes the application
+	 * saves highscores, closes the application and opens up main menu
 	 */
 	public void gameOver() {
 		game.stop();
+		boolean highscore = false;
 		if(game.points>game.highScore) {
 			try {
 				FileOutputStream fos = new FileOutputStream(new File("./Highscore.txt"));
@@ -92,14 +92,18 @@ public class UserInterface extends JFrame implements Runnable{
 				oos.writeObject((long) game.points);
 				oos.close();
 				fos.close();
+				highscore=true;
 				System.out.println("New highscore: " + game.points);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		//TODO: tell player if he got a new highscore
-		JOptionPane.showMessageDialog(this, "Game over, your score: " + game.points);
-		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		if(highscore)JOptionPane.showMessageDialog(this, "Game over, your score: " + game.points + "\nNew highscore!");
+		else JOptionPane.showMessageDialog(this, "Game over, your score: " + game.points);
+		this.setVisible(false);
+		this.dispose();
+		this.running=false;
+		new MainMenu();
 	}
 
 }
