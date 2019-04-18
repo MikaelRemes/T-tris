@@ -1,5 +1,4 @@
 package mainpackage;
-
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileOutputStream;

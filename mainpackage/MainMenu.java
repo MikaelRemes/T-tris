@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Main menu
+ * Main menu screen
  */
 public class MainMenu extends JFrame{
 

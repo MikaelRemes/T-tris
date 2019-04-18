@@ -1,5 +1,4 @@
 package mainpackage;
-
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -18,7 +17,6 @@ public class StatsPanel extends JPanel{
 	private JLabel levelLabel = new JLabel();
 	private JLabel highScoreLabel = new JLabel();
 	
-	//TODO: make statspanel prettier
 	/**
 	 * Constructor
 	 * @param game, the game logic object.
