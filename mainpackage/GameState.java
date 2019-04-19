@@ -357,7 +357,7 @@ public class GameState implements Runnable{
 	}
 	
 	/**
-	 * Rotate the player controlled piece counter-clockwise.
+	 * Rotate the player controlled piece clockwise.
 	 * @return true if no collision, false otherwise.
 	 */
 	public boolean rotatePieceCCW() {
