@@ -89,14 +89,15 @@ public class MainMenu extends JFrame{
   	    		System.out.println("RUNNING TESTS....");
   	    		
   	    		long highScore = doHighScoreFilesTest();
-  	    		if(highScore!=-1) {
+  	    		if(highScore!= -1L) {
   	    			System.out.print("Found highscore, current highscore: ");
   	    			System.out.println("" + highScore);
+  	    			JOptionPane.showMessageDialog(menu, "Testing done \nAll necessary files found \nHighscore: " + highScore);
   	    		}else {
-  	    			System.out.println("Could not find highscore");
+  	    			System.out.println("Could not find highscore file");
+  	    			JOptionPane.showMessageDialog(menu, "Testing done  \nCould not find highscore file");
   	    		}
   	    		
-  	    		JOptionPane.showMessageDialog(menu, "Testing done \nAll necessary files found \nHighscore: " + highScore);
   	    		System.out.println("TESTING DONE");
   	    		}catch(Exception error) {
   	    			System.out.println("ERROR:");
